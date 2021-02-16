@@ -2,7 +2,7 @@
   "name": "commitlint-action",
   "version": "0.0.1",
   "description": "Lint commit messages by GitHub Actions",
-  "main": "index.js",
+  "main": "lib/main.js",
   "types": "lib/*.d.ts",
   "homepage": "https://github.com/Mogeko/commitlint-action",
   "repository": "https://github.com/Mogeko/commitlint-action.git",

@@ -57,7 +57,7 @@ const setOutput = (val: LintOutcome) => {
   }
 }
 
-export = async function main() {
+async function main() {
   const { config, opt } = getConfig()
   const commitMsg = await getCommitMsg()
 
@@ -71,3 +71,8 @@ export = async function main() {
 
   core.info("All good! 🎉")
 }
+
+main()
+  .catch(e => {
+    core.setFailed(e.massage)
+  })
