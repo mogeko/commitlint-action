@@ -48,8 +48,7 @@ typings/
 *.tsbuildinfo
 
 # Files built by TypeScript
-lib/*.d.ts*
-lib/*.js*
+lib
 
 # Optional npm cache directory
 .npm
@@ -84,7 +83,7 @@ lib/*.js*
 
 # Nuxt.js build / generate output
 .nuxt
-dist
+#dist
 
 # Gatsby files
 .cache/
