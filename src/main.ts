@@ -100,6 +100,6 @@ const main = async () => {
 }
 
 main()
-  .catch(e => {
-    core.setFailed(e.massage)
+  .catch((e: Error) => {
+    core.setFailed(e.message)
   })
