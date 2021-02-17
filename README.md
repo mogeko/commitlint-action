@@ -12,6 +12,8 @@ You can use [Angular Commit Message Format][angular-commit-message-format] (or o
 
 You just need to provide `GITHUB_TOKEN` ([if you don't know what it is][github-token]) and a configuration scheme named `@commitlint/config-angular`.
 
+**default: `@commitlint/config-conventional`**
+
 ```yml
 - uses: Mogeko/commitlint-action@master
   with:
@@ -28,6 +30,8 @@ You can customize the configuration file with `configFile`. You can also mix `co
 Just enter the path of the configuration file (e.g. `./.commitlint.yml`).
 
 Configuration can be picked up from `*.config.js`, `*.js`, `*.json`, or `*.yml` file.
+
+**default: N/A**
 
 ```yml
 - uses: Mogeko/commitlint-action@master
@@ -81,6 +85,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           config: '@commitlint/config-conventional'
+          configFile: '.commitlint.yml'
           strict: true
           verbose: false
 ```
