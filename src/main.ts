@@ -16,11 +16,14 @@ const getConfig = () => {
     configFile: core.getInput("configFile"),
   }
 
-  core.debug(`config: ${input.config}`)
-  core.debug(`opt_cwd: ${GITHUB_WORKSPACE}`)
-  core.debug(`opt_file: ${input.configFile}`)
+  const config = input.config ? input.config : "@commitlint/config-conventional"
+  const configFile = input.configFile ? input.configFile : undefined
 
-  return { config: input.config, opt: { cwd: GITHUB_WORKSPACE, file: input.configFile } }
+  core.debug(`config: ${config}`)
+  core.debug(`opt_file: ${configFile}`)
+  core.debug(`opt_cwd: ${GITHUB_WORKSPACE}`)
+
+  return { config: config, opt: { cwd: GITHUB_WORKSPACE, file: configFile } }
 }
 
 // Get commit message

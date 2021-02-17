@@ -10,7 +10,7 @@ jobs:
       - name: Lint commit messages
         uses: Mogeko/commitlint-action@dev
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: '${{ secrets.GITHUB_TOKEN }}'
           config: '@commitlint/config-angular'
         id: commitlint
       - name: Save result of lint
