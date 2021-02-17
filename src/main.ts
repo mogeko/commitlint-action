@@ -8,6 +8,8 @@ import { OctokitResponse } from "@octokit/types"
 
 // Processing config
 const getConfig = () => {
+  core.debug("Processing config")
+
   const GITHUB_WORKSPACE = process.env.GITHUB_WORKSPACE as string
   const input = {
     config: core.getInput("config"),
@@ -17,32 +19,50 @@ const getConfig = () => {
     throw new Error("No config found, please set commitlint config to your project!")
   }
 
+  core.debug(`config: ${input.config}`)
+  core.debug(`opt_cwd: ${GITHUB_WORKSPACE}`)
+
   return { config: input.config, opt: { cwd: GITHUB_WORKSPACE } }
 }
 
 // Get commit message
 const getCommitMsg = async () => {
+  core.debug("Get commit message")
+
   type CommitType = OctokitResponse<{ message: string }>
+
   const { context: cx } = github
+  core.debug(`owner: ${cx.repo.owner}`)
+  core.debug(`repo: ${cx.repo.repo}`)
+  core.debug(`commit_sha: ${cx.sha}`)
+
   const token = core.getInput("token")
   const octokit = github.getOctokit(token)
-  return (await octokit.git.getCommit({
+  const commit = await octokit.git.getCommit({
     owner: cx.repo.owner,
     repo: cx.repo.repo,
     commit_sha: cx.sha,
-  }) as CommitType).data.message
+  }) as CommitType
+  core.debug(`res_status: ${commit.status}`)
+  core.debug(`res_data_message: ${commit.data.message}`)
+
+  return commit.data.message
 }
 
-// Output result
-const setOutput = (val: LintOutcome) => {
+// Print result
+const printResult = (val: LintOutcome) => {
+  core.debug("Print result")
+
   const fmt = (val: LintOutcome, verbose: boolean) => format({ results: [val] }, {
     color: true,
     helpUrl: "https://github.com/conventional-changelog/commitlint/#what-is-commitlint",
     verbose,
   })
-  const bool = (val: string): boolean => (val === 'true')
+  const bool = (val: string): boolean => (val === "true")
+
   const strict = bool(core.getInput("strict"))
-  const verbose = bool(core.getInput("verbose"))
+  const verbose = core.isDebug() ? true : bool(core.getInput("verbose"))
+  core.debug(`strict: ${strict}    verbose: ${verbose}`)
 
   if (val.errors.length) {
     core.info("Failed due to the following errors:")
@@ -57,17 +77,20 @@ const setOutput = (val: LintOutcome) => {
   }
 }
 
-async function main() {
+const main = async () => {
   const { config, opt } = getConfig()
   const commitMsg = await getCommitMsg()
 
-  await load({ extends: [config] }, opt)
-    .then(({ rules }) => {
-      lint(commitMsg, rules)
+  const result = await load({ extends: [config] }, opt)
+    .then(async ({ rules }) => {
+      return await lint(commitMsg, rules)
         .then(res => {
-          setOutput(res)
+          printResult(res)
+          return res
         })
     })
+  
+  core.setOutput("COMMITLINT_RESULT", result)
 
   core.info("All good! 🎉")
 }

@@ -16,6 +16,10 @@ input:
     description: 'Whether commitlint output shoud be verbose when failing'
     default: false
     required: false
+outputs:
+  COMMITLINT_RESULT:
+    description: 'The result of lint'
+
 branding:
   icon: 'check-square'
   color: 'white'
