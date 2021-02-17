@@ -27,7 +27,8 @@
     "postinstall": "husky install",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable",
-    "build": "tsc -b && ncc build lib/main.js -m --license licenses.txt",
+    "build": "tsc -b && npm run package",
+    "package": "ncc build lib/main.js -s -m --license licenses.txt",
     "lint": "eslint ."
   },
   "dependencies": {
