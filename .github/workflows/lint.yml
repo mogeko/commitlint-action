@@ -1,0 +1,22 @@
+name: Lint Commit Messages
+on: [push, pull_request]
+
+jobs:
+  commitlint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Lint commit messages
+        uses: Mogeko/commitlint-action@dev
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config: '@commitlint/config-angular'
+        id: commitlint
+      - name: Save result of lint
+        run: echo "${{ steps.commitlint.outputs.COMMITLINT_RESULT }}" > result.json
+      - name: Update result.json
+        uses: actions/upload-artifact@v2
+        with:
+          name: result
+          path: result.json
