@@ -79,10 +79,13 @@ const main = async () => {
   const { config, opt } = getConfig()
   const commitMsg = await getCommitMsg()
 
+  core.debug("Commitlint: load configuration")
   const result = await load({ extends: [config] }, opt)
     .then(async ({ rules }) => {
+      core.debug("Commitlint: lint commit message")
       return await lint(commitMsg, rules)
         .then(res => {
+          core.debug("Commitlint: format & print result")
           printResult(res)
           return res
         })
