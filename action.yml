@@ -7,7 +7,11 @@ input:
     required: true
   config:
     description: 'Commitlint configuration scheme'
-    required: true
+    default: '@commitlint/config-conventional'
+    required: false
+  configFile:
+    description: 'Commitlint configuration file path'
+    required: false
   strict:
     description: 'Action will fail even if warnings are detected when in strict mode'
     default: true

@@ -13,16 +13,14 @@ const getConfig = () => {
   const GITHUB_WORKSPACE = process.env.GITHUB_WORKSPACE as string
   const input = {
     config: core.getInput("config"),
-  }
-
-  if (!input.config) {
-    throw new Error("No config found, please set commitlint config to your project!")
+    configFile: core.getInput("configFile"),
   }
 
   core.debug(`config: ${input.config}`)
   core.debug(`opt_cwd: ${GITHUB_WORKSPACE}`)
+  core.debug(`opt_file: ${input.configFile}`)
 
-  return { config: input.config, opt: { cwd: GITHUB_WORKSPACE } }
+  return { config: input.config, opt: { cwd: GITHUB_WORKSPACE, file: input.configFile } }
 }
 
 // Get commit message

@@ -21,6 +21,21 @@ You just need to provide `GITHUB_TOKEN` ([if you don't know what it is][github-t
 
 [More configuration schemes...](#commit-message-format)
 
+## Custom configuration file
+
+You can customize the configuration file with `configFile`. You can also mix `config` and `configFile`.
+
+Just enter the path of the configuration file (e.g. `./.commitlint.yml`).
+
+Configuration can be picked up from `*.config.js`, `*.js`, `*.json`, or `*.yml` file.
+
+```yml
+- uses: Mogeko/commitlint-action@master
+  with:
+    token: ${{ secrets.GITHUB_TOKEN }}
+    configFile: '.commitlint.yml'
+```
+
 ## Strict mode
 
 Action will fail even if **warnings** are detected when in strict mode.
@@ -31,7 +46,6 @@ Action will fail even if **warnings** are detected when in strict mode.
 - uses: Mogeko/commitlint-action@master
   with:
     token: ${{ secrets.GITHUB_TOKEN }}
-    config: '@commitlint/config-angular'
     strict: false # default: true
 ```
 
@@ -45,7 +59,6 @@ Whether commitlint output shoud be verbose when failing.
 - uses: Mogeko/commitlint-action@master
   with:
     token: ${{ secrets.GITHUB_TOKEN }}
-    config: '@commitlint/config-angular'
     verbose: true # default: false
 ```
 
@@ -67,7 +80,7 @@ jobs:
       - uses: Mogeko/commitlint-action@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          config: '@commitlint/config-angular'
+          config: '@commitlint/config-conventional'
           strict: true
           verbose: false
 ```
@@ -76,12 +89,13 @@ jobs:
 
 Various inputs are defined in [`action.yml`][action-yml] to let you configure the labeler:
 
-| Name      | Description                                                        | Default |
-| --------- | ------------------------------------------------------------------ | ------- |
-| `token`   | The `GITHUB_TOKEN` secret                                          | N/A     |
-| `config`  | Commitlint configuration scheme                                    | N/A     |
-| `strict`  | Action will fail even if warnings are detected when in strict mode | `true`  |
-| `verbose` | Whether commitlint output shoud be verbose when failing            | `false` |
+| Name         | Description                                                  | Default                           |
+| ------------ | ------------------------------------------------------------ | --------------------------------- |
+| `token`      | The `GITHUB_TOKEN` secret                                    | N/A                               |
+| `config`     | Commitlint configuration scheme                              | `@commitlint/config-conventional` |
+| `configFile` | Commitlint configuration file path                           | N/A                               |
+| `strict`     | Action will fail even if warnings are detected when in strict mode | `true`                      |
+| `verbose`    | Whether commitlint output shoud be verbose when failing      | `false`                           |
 
 ## Output
 
@@ -102,7 +116,7 @@ You can use `COMMITLINT_RESULT` in the context of workflow:
   run: echo "The result of lint is ${{ step.commitlint.outputs.COMMITLINT_RESULT }}"
 ```
 
-If it fails, `COMMITLINT_RESULT` will be like this:
+If it fails, `COMMITLINT_RESULT` will be like:
 
 ```json
 {
@@ -120,7 +134,7 @@ If it fails, `COMMITLINT_RESULT` will be like this:
 }
 ```
 
-If successful, `COMMITLINT_RESULT` will be like this:
+If successful, `COMMITLINT_RESULT` will be like:
 
 ```json
 {
