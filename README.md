@@ -19,7 +19,7 @@ You just need to provide `GITHUB_TOKEN` ([if you don't know what it is][github-t
     config: '@commitlint/config-angular'
 ```
 
-[More configuration schemes...](#-commit-message-format)
+[More configuration schemes...](#commit-message-format)
 
 ## Strict mode
 
