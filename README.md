@@ -115,10 +115,9 @@ You can use `COMMITLINT_RESULT` in the context of workflow:
   uses: Mogeko/commitlint-action@master
   with:
     token: ${{ secrets.GITHUB_TOKEN }}
-    config: '@commitlint/config-conventional'
   id: commitlint
 - name: Print result of lint
-  run: echo "The result of lint is ${{ step.commitlint.outputs.COMMITLINT_RESULT }}"
+  run: echo "The result of lint is ${{ steps.commitlint.outputs.COMMITLINT_RESULT }}"
 ```
 
 If it fails, `COMMITLINT_RESULT` will be like:
