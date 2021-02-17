@@ -83,6 +83,54 @@ Various inputs are defined in [`action.yml`][action-yml] to let you configure th
 | `strict`  | Action will fail even if warnings are detected when in strict mode | `true`  |
 | `verbose` | Whether commitlint output shoud be verbose when failing            | `false` |
 
+## Output
+
+Whenever success or failure, Action will output the result of lint in JSON format.
+
+#### `COMMITLINT_RESULT`
+
+You can use `COMMITLINT_RESULT` in the context of workflow:
+
+```yml
+- name: Lint commit messages
+  uses: Mogeko/commitlint-action@master
+  with:
+    token: ${{ secrets.GITHUB_TOKEN }}
+    config: '@commitlint/config-conventional'
+  id: commitlint
+- name: Print result of lint
+  run: echo "The result of lint is ${{ step.commitlint.outputs.COMMITLINT_RESULT }}"
+```
+
+If it fails, `COMMITLINT_RESULT` will be like this:
+
+```json
+{
+  "valid": false,
+  "errors": [
+    {
+      "level": 2,
+      "valid": false,
+      "name": "type-enum",
+      "message": "type must be one of [build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test]"
+    }
+  ],
+  "warnings": [],
+  "input": "foo: bar"
+}
+```
+
+If successful, `COMMITLINT_RESULT` will be like this:
+
+```json
+{
+  "valid": true,
+  "errors": [],
+  "warnings": [],
+  "input": "chore: message"
+}
+```
+
 ## Commit Message Format
 
 The configuration schemes currently available for `config` are:

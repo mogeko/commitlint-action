@@ -49,9 +49,9 @@ const getCommitMsg = async () => {
   return commit.data.message
 }
 
-// Output result
-const setOutput = (val: LintOutcome) => {
-  core.debug("Output result")
+// Print result
+const printResult = (val: LintOutcome) => {
+  core.debug("Print result")
 
   const fmt = (val: LintOutcome, verbose: boolean) => format({ results: [val] }, {
     color: true,
@@ -81,13 +81,16 @@ const main = async () => {
   const { config, opt } = getConfig()
   const commitMsg = await getCommitMsg()
 
-  await load({ extends: [config] }, opt)
-    .then(({ rules }) => {
-      lint(commitMsg, rules)
+  const result = await load({ extends: [config] }, opt)
+    .then(async ({ rules }) => {
+      return await lint(commitMsg, rules)
         .then(res => {
-          setOutput(res)
+          printResult(res)
+          return res
         })
     })
+  
+  core.setOutput("COMMITLINT_RESULT", result)
 
   core.info("All good! 🎉")
 }
