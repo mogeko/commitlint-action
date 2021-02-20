@@ -165,7 +165,7 @@ The configuration schemes currently available for `config` are:
 The scripts and documentation in this project are released under the [MIT License][license].
 
 
-[action-yml]: https://github.com/Mogeko/commitlint-action/blob/master/action.yml
+[action-yml]: https://github.com/Mogeko/commitlint-action/blob/dist/action.yml
 [angular-commit-message-format]: https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-commit-message-format
 [config-angular]: https://github.com/conventional-changelog/commitlint/tree/master/%40commitlint/config-angular
 [config-conventional]: https://github.com/conventional-changelog/commitlint/tree/master/%40commitlint/config-conventional
