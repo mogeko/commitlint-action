@@ -1,0 +1,33 @@
+name: 'commitlint'
+author: 'Mogeko'
+description: 'Lint commit messages by GitHub Actions'
+input:
+  token:
+    description: 'The GITHUB_TOKEN secret'
+    required: true
+  config:
+    description: 'Commitlint configuration scheme'
+    default: '@commitlint/config-conventional'
+    required: false
+  configFile:
+    description: 'Commitlint configuration file path'
+    required: false
+  strict:
+    description: 'Action will fail even if warnings are detected when in strict mode'
+    default: true
+    required: false
+  verbose:
+    description: 'Whether commitlint output shoud be verbose when failing'
+    default: false
+    required: false
+outputs:
+  COMMITLINT_RESULT:
+    description: 'The result of lint'
+
+branding:
+  icon: 'check-square'
+  color: 'white'
+
+runs:
+  using: 'node12'
+  main: 'index.js'
