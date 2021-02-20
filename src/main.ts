@@ -6,9 +6,29 @@ import format from "@commitlint/format"
 import { LintOutcome } from "@commitlint/types"
 import { OctokitResponse } from "@octokit/types"
 
+// Commitlint configuration
+import configAngular = require("@commitlint/config-angular")
+import configConventional = require("@commitlint/config-conventional")
+import configLernaScopes = require("@commitlint/config-lerna-scopes")
+import configPatternplate = require("@commitlint/config-patternplate")
+
+
 // Processing config
 const getConfig = () => {
   core.debug("Processing config")
+
+  const switchConfig = (key: string) => {
+    switch (key) {
+      case "@commitlint/config-angular":
+        return configAngular
+      case "@commitlint/config-lerna-scopes":
+        return configLernaScopes
+      case "@commitlint/config-patternplate":
+        return configPatternplate
+      default:
+        return configConventional
+    }
+  }
 
   const GITHUB_WORKSPACE = process.env.GITHUB_WORKSPACE as string
   const input = {
@@ -16,14 +36,13 @@ const getConfig = () => {
     configFile: core.getInput("configFile"),
   }
 
-  const config = input.config ? input.config : "@commitlint/config-conventional"
-  const configFile = input.configFile ? input.configFile : undefined
-
-  core.debug(`config: ${config}`)
-  core.debug(`opt_file: ${configFile}`)
+  core.debug(`config: ${input.config}`)
+  core.debug(`opt_file: ${input.configFile}`)
   core.debug(`opt_cwd: ${GITHUB_WORKSPACE}`)
 
-  return { config: config, opt: { cwd: GITHUB_WORKSPACE, file: configFile } }
+  const rules = switchConfig(input.config).rules
+
+  return { rules: rules, opt: { cwd: GITHUB_WORKSPACE, file: input.configFile } }
 }
 
 // Get commit message
@@ -79,11 +98,11 @@ const printResult = (val: LintOutcome) => {
 }
 
 const main = async () => {
-  const { config, opt } = getConfig()
+  const { rules, opt } = getConfig()
   const commitMsg = await getCommitMsg()
 
   core.debug("Commitlint: load configuration")
-  const result = await load({ extends: [config] }, opt)
+  const result = await load({ rules: rules }, opt)
     .then(async ({ rules }) => {
       core.debug("Commitlint: lint commit message")
       return await lint(commitMsg, rules)
